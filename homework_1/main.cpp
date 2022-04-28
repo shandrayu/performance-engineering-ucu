@@ -7,6 +7,20 @@
 #include <thread>
 #include <vector>
 
+void i_like_to_repeat_myself(int N);
+void sleeping_beauty();
+void avid_writer();
+void does_not_download_anything_really();
+
+int main() {
+  std::cout << "Main started..." << std::endl;
+  i_like_to_repeat_myself(30);
+  sleeping_beauty();
+  avid_writer();
+  does_not_download_anything_really();
+  return 0;
+}
+
 struct Timer {
   Timer(const std::string name) : name_(name) {
     std::cout << "Started " << name_ << "..." << std::endl;
@@ -71,21 +85,4 @@ void avid_writer() {
     }
   }
   file.close();
-}
-
-void does_not_download_anything_really() {
-  Timer timer("does_not_download_anything_really");
-  const std::string kSomeRelease =
-      "https://github.com/joyent/node/tarball/v0.7.1";
-  cpr::Response r = cpr::Get(cpr::Url{kSomeRelease});
-  std::cout << "downloaded_bytes " << r.downloaded_bytes << std::endl;
-}
-
-int main() {
-  std::cout << "Main started..." << std::endl;
-  i_like_to_repeat_myself(30);
-  sleeping_beauty();
-  avid_writer();
-  does_not_download_anything_really();
-  return 0;
 }
