@@ -86,3 +86,11 @@ void avid_writer() {
   }
   file.close();
 }
+
+void does_not_download_anything_really() {
+  Timer timer("does_not_download_anything_really");
+  const std::string kSomeRelease =
+      "https://github.com/joyent/node/tarball/v0.7.1";
+  cpr::Response r = cpr::Get(cpr::Url{kSomeRelease});
+  std::cout << "downloaded_bytes " << r.downloaded_bytes << std::endl;
+}
