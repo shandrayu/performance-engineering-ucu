@@ -14,7 +14,7 @@ void does_not_download_anything_really();
 
 int main() {
   std::cout << "Main started..." << std::endl;
-  i_like_to_repeat_myself(30);
+  i_like_to_repeat_myself(45);
   sleeping_beauty();
   avid_writer();
   does_not_download_anything_really();
