@@ -1,8 +1,8 @@
-# Lab execution report
+# Homework 1 execution report
 
 ## Goal
 
-Figure out what is wrong with a program
+Figure out what is going on with a program.
 
 ## Tools used
 
@@ -34,7 +34,11 @@ does_not_download_anything_really finished, duration 5515513 microseconds (5.515
 100.00    0.000000                     0 total
 ```
 
-Conclusion: ltrace does not show external library calls. (Why really? The external library is used in the binary. Assumption - it is statically linked, need to check cmake library function).
+`ltrace` does not show external library calls.
+
+#### TODO
+
+- [] Check cmake because the external library is used in the binary. Assumption - it is statically linked
 
 ### strace
 
@@ -179,117 +183,91 @@ Explanation: shows device statistisc in human-readable format, in kilobytes per 
 
 ```bash
 Linux 5.13.0-40-generic (shandra-vb)  01.05.2022  _x86_64_ (1 CPU)
+tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+1,50         2,0k        18,0k         0,0k       4,0k      36,0k       0,0k sda
 
+tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+1,50         8,0k         0,0k         0,0k      16,0k       0,0k       0,0k sda
 
-      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
-     1,50         2,0k        18,0k         0,0k       4,0k      36,0k       0,0k sda
+tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+1,50        38,0k         0,0k         0,0k      76,0k       0,0k       0,0k sda
 
+tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+41,00         1,7M         6,0k         0,0k       3,4M      12,0k       0,0k sda
 
-      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
-     1,50         8,0k         0,0k         0,0k      16,0k       0,0k       0,0k sda
+tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+1,99        10,0k        17,9k         0,0k      20,0k      36,0k       0,0k sda
 
+tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+0,50         2,0k         0,0k         0,0k       4,0k       0,0k       0,0k sda
 
-      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
-     1,50        38,0k         0,0k         0,0k      76,0k       0,0k       0,0k sda
+tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+0,50         2,0k         0,0k         0,0k       4,0k       0,0k       0,0k sda
 
+tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+2,00         4,0k        14,0k         0,0k       8,0k      28,0k       0,0k sda
 
-      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
-    41,00         1,7M         6,0k         0,0k       3,4M      12,0k       0,0k sda
+tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+4,98        17,9k        19,9k         0,0k      36,0k      40,0k       0,0k sda
 
+tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+1,50        20,0k         0,0k         0,0k      40,0k       0,0k       0,0k sda
 
-      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
-     1,99        10,0k        17,9k         0,0k      20,0k      36,0k       0,0k sda
+tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+0,50         4,0k         0,0k         0,0k       8,0k       0,0k       0,0k sda
 
+tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+1,00         0,0k        16,0k         0,0k       0,0k      32,0k       0,0k sda
 
-      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
-     0,50         2,0k         0,0k         0,0k       4,0k       0,0k       0,0k sda
+tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+10,00       266,0k         0,0k         0,0k     532,0k       0,0k       0,0k sda
 
+tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+105,94         1,3M        11,8M         0,0k       2,7M      23,8M       0,0k sda
 
-      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
-     0,50         2,0k         0,0k         0,0k       4,0k       0,0k       0,0k sda
+tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+42,00       140,0k        12,0M         0,0k     280,0k      24,1M       0,0k sda
 
+tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+190,50         2,0M        13,7M         0,0k       3,9M      27,5M       0,0k sda
 
-      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
-     2,00         4,0k        14,0k         0,0k       8,0k      28,0k       0,0k sda
+tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+23,50       132,0k         1,3M         0,0k     264,0k       2,6M       0,0k sda
 
+tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+1,00         0,0k        23,9k         0,0k       0,0k      48,0k       0,0k sda
 
-      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
-     4,98        17,9k        19,9k         0,0k      36,0k      40,0k       0,0k sda
+tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+8,50       116,0k        24,0k         0,0k     232,0k      48,0k       0,0k sda
 
+tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+4,50        34,0k         0,0k         0,0k      68,0k       0,0k       0,0k sda
 
-      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
-     1,50        20,0k         0,0k         0,0k      40,0k       0,0k       0,0k sda
+tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+37,00       236,0k        10,0k         0,0k     472,0k      20,0k       0,0k sda
 
+tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+0,50         0,0k         4,0k         0,0k       0,0k       8,0k       0,0k sda
 
-      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
-     0,50         4,0k         0,0k         0,0k       8,0k       0,0k       0,0k sda
+tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
 
-
-      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
-     1,00         0,0k        16,0k         0,0k       0,0k      32,0k       0,0k sda
-
-
-      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
-    10,00       266,0k         0,0k         0,0k     532,0k       0,0k       0,0k sda
-
-
-      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
-   105,94         1,3M        11,8M         0,0k       2,7M      23,8M       0,0k sda
-
-
-      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
-    42,00       140,0k        12,0M         0,0k     280,0k      24,1M       0,0k sda
-
-
-      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
-   190,50         2,0M        13,7M         0,0k       3,9M      27,5M       0,0k sda
-
-
-      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
-    23,50       132,0k         1,3M         0,0k     264,0k       2,6M       0,0k sda
-
-
-      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
-     1,00         0,0k        23,9k         0,0k       0,0k      48,0k       0,0k sda
-
-
-      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
-     8,50       116,0k        24,0k         0,0k     232,0k      48,0k       0,0k sda
-
-
-      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
-     4,50        34,0k         0,0k         0,0k      68,0k       0,0k       0,0k sda
-
-
-      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
-    37,00       236,0k        10,0k         0,0k     472,0k      20,0k       0,0k sda
-
-
-      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
-     0,50         0,0k         4,0k         0,0k       0,0k       8,0k       0,0k sda
-
-
-      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
-
-
-      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
-
+tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
 ```
 
 From this output that parameter `kB_wrtn/s` (kilobytes written in second) `kB_read/s`, `kB_read`, `kB_wrtn` were increased during the program run. The usual values were in K. During the program run, the values have increase to the order of M.
 
 ```bash
-    tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
-  105,94         1,3M        11,8M         0,0k       2,7M      23,8M       0,0k sda
+  tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+105,94         1,3M        11,8M         0,0k       2,7M      23,8M       0,0k sda
 
-    tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
-  42,00       140,0k        12,0M         0,0k     280,0k      24,1M       0,0k sda
+  tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+42,00       140,0k        12,0M         0,0k     280,0k      24,1M       0,0k sda
 
-    tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
-  190,50         2,0M        13,7M         0,0k       3,9M      27,5M       0,0k sda
+  tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+190,50         2,0M        13,7M         0,0k       3,9M      27,5M       0,0k sda
 
-    tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
-  23,50       132,0k         1,3M         0,0k     264,0k       2,6M       0,0k sda
+  tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+23,50       132,0k         1,3M         0,0k     264,0k       2,6M       0,0k sda
   ```
 
 ### perf
@@ -402,14 +380,14 @@ Then run a program and run `gprog`.
 gprof2dot homework_1 | dot -Tsvg -o output.svg
 ```
 
-TODO: Fix execution error for now.
+TODO: Fix execution error.
 
 ## Summary
 
-- `strace` - non-optimal writing to file patterns in avid_writer
-- `netstat` - shows high network usage in `homework_1` binary but does not give information about specific function
+- `strace` - non-optimal writing to file patterns in avid_writer.
+- `netstat` - shows high network usage in `homework_1` binary but does not give information about specific function.
 - `iostat` - disk activity in total but does not give information about specific functions
-- `perf` - a lot of tools for performance profiling. Indicated the most time consuming function `fib` and deep recursion problem. Call graph available.
+- `perf` - a lot of tools for performance profiling. Indicated the most time consuming.function `fib` and deep recursion problem. Call graph available.
 
 ## Analysis steps
 
@@ -423,20 +401,20 @@ Assume that performance measurement target is execution time and goal is to redu
 
 ### Sleeping function
 
-2. Commnet out all functions but one.
-3. Assumption: look for specific system call for sleep with strace(I have not found one).
+2. Comment out all functions but one.
+3. Assumption: look for specific system call for sleep with `strace` (I have not found one).
 4. Repeat 2 and 3 for other function.
 
 ### Write to file
 
-2. Commnet out all functions but one.
-3. Use `iostat` to understand if the function under analysis has disk activity
+2. Comment out all functions but one.
+3. Use `iostat` to understand if the function under analysis has disk activity.
 4. Repeat 2 and 3 for other function.
 
 ### Internet download
 
-2. Commnet out all functions but one.
-3. Use `netstat` to understand if the function under analysis has internat activity
+2. Comment out all functions but one.
+3. Use `netstat` to understand if the function under analysis has internat activity.
 4. Repeat 2 and 3 for other function.
 
 ## References
