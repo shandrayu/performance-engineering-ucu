@@ -292,12 +292,154 @@ From this output that parameter `kB_wrtn/s` (kilobytes written in second) `kB_re
   23,50       132,0k         1,3M         0,0k     264,0k       2,6M       0,0k sda
   ```
 
-## Conclusion
+### perf
+
+Performance analysis tools for Linux.
+
+#### Run tool
+
+```bash
+sudo perf record --sample-cpu -d fp ./homework_1 
+```
+
+#### Report ananlysis
+
+Command generates `perf.data` file. To get an information out of it run
+
+```bash
+sudo perf report
+```
+
+The top output
+
+```bash
+Samples: 6K of event 'cpu-clock:pppH', Event count (approx.): 1581000000
+Overhead  Command     Shared Object            Symbol
+  34,74%  homework_1  [vboxguest]              [k] vbg_req_perform                                                                           ◆
+  28,08%  homework_1  homework_1               [.] fib                                                                                       ▒
+  11,81%  homework_1  [e1000]                  [k] e1000_xmit_frame                                                                          ▒
+   3,91%  homework_1  [e1000]                  [k] e1000_clean                                                                               ▒
+   1,20%  homework_1  [e1000]                  [k] e1000_alloc_rx_buffers                                                                    ▒
+   0,66%  homework_1  [kernel.kallsyms]        [k] crc32c_intel_update                                                                       ▒
+   0,63%  homework_1  [kernel.kallsyms]        [k] __kmalloc                                                                                 ▒
+   0,63%  homework_1  [kernel.kallsyms]        [k] memset                  
+```
+
+#### Summary report
+
+```bash
+perf report --stdio --show-nr-samples --percent-limit=1
+```
+
+```bash
+# Total Lost Samples: 0
+#
+# Samples: 9K of event 'cpu-clock:pppH'
+# Event count (approx.): 2397250000
+#
+# Overhead       Samples  Command     Shared Object            Symbol                                >
+# ........  ............  ..........  .......................  ......................................>
+#
+    54.93%          5267  homework_1  [vboxguest]              [k] vbg_req_perform
+    23.44%          2248  homework_1  homework_1               [.] fib
+     7.47%           716  homework_1  [e1000]                  [k] e1000_xmit_frame
+```
+
+Function `fib` (Fibonacci number calculation with recursion) takes a lot of io CPU resources.
+
+#### Call graps generation
+
+```bash
+sudo perf record --call-graph fp ./homework_1 
+```
+
+Will create a call graph for a program. Here the recursion will be highly visible. The reccomendation I've got is `Check IO/CPU overload!`.
+
+Call graph for recursive function
+
+```bash
+56.40%     0.00%             0  homework_1  libc-2.31.so             [.] __libc_start_main
+            |
+            ---__libc_start_main
+               main
+               |          
+               |--54.44%--i_like_to_repeat_myself
+               |          fib
+               |          fib
+               |          fib
+               |          fib
+               |          fib
+               |          fib
+               |          fib
+               |          fib
+               |          fib
+               |          fib
+               |          fib
+               |          fib
+               |          fib
+               |          |          
+               |           --54.40%--fib
+               |                     |          
+               |                      --54.37%--fib
+               |                                fib
+               |                                |          
+               |                                 --54.31%--fib
+```
+
+### gprof
+
+Before profiling the program shall be build with `-pg` flag.
+
+```bash
+cmake -DCMAKE_CXX_FLAGS=-pg -DCMAKE_EXE_LINKER_FLAGS=-pg -DCMAKE_SHARED_LINKER_FLAGS=-pg ../
+cmake --build .
+```
+
+Then run a program and run `gprog`.
+
+```bash
+./homework_1
+gprof2dot homework_1 | dot -Tsvg -o output.svg
+```
+
+TODO: Fix execution error for now.
+
+## Summary
 
 - `strace` - non-optimal writing to file patterns in avid_writer
 - `netstat` - shows high network usage in `homework_1` binary but does not give information about specific function
 - `iostat` - disk activity in total but does not give information about specific functions
+- `perf` - a lot of tools for performance profiling. Indicated the most time consuming function `fib` and deep recursion problem. Call graph available.
+
+## Analysis steps
+
+Assume that performance measurement target is execution time and goal is to reduce execution time.
+
+1. Run a general performance profiler which will show the biggest execution time.
+
+### Deep recursion
+
+2. Deep recursion can be easily seen on `perf` logs.
+
+### Sleeping function
+
+2. Commnet out all functions but one.
+3. Assumption: look for specific system call for sleep with strace(I have not found one).
+4. Repeat 2 and 3 for other function.
+
+### Write to file
+
+2. Commnet out all functions but one.
+3. Use `iostat` to understand if the function under analysis has disk activity
+4. Repeat 2 and 3 for other function.
+
+### Internet download
+
+2. Commnet out all functions but one.
+3. Use `netstat` to understand if the function under analysis has internat activity
+4. Repeat 2 and 3 for other function.
 
 ## References
 
 - [Linux man pages](https://man7.org/linux/man-page)
+- [gprof2dot](https://github.com/jrfonseca/gprof2dot)
