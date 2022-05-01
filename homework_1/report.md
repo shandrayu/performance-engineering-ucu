@@ -38,7 +38,7 @@ does_not_download_anything_really finished, duration 5515513 microseconds (5.515
 
 #### TODO
 
-- [] Check cmake because the external library is used in the binary. Assumption - it is statically linked
+- [ ] Check cmake because the external library is used in the binary. Assumption - it is statically linked
 
 ### strace
 
@@ -380,7 +380,9 @@ Then run a program and run `gprog`.
 gprof2dot homework_1 | dot -Tsvg -o output.svg
 ```
 
-TODO: Fix execution error.
+#### TODO
+
+- [ ] Fix execution error.
 
 ## Summary
 
