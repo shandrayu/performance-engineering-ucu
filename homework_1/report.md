@@ -116,38 +116,187 @@ Network monitoring tool.
 #### Command line
 
 ```bash
-netstat -ep -t 20
+netstat -ep -t 20 -c | grep "homework_1"
 ```
 
-1. Run program in one window
-2. Run `netstat` in other window during the programs execution
+1. Run command in one terminal window during the programs execution
+2. Run program in other terminal window
 
 #### Output
 
 ```bash
-Proto Recv-Q Send-Q Local Address           Foreign Address         State       User       Inode      PID/Program name    
-tcp       25      0 shandra-vb:37774        a104-96-139-12.de:https CLOSE_WAIT  shandra    32976      1364/Code --standar 
-tcp        0      0 shandra-vb:44760        lb-140-82-121-10-:https ESTABLISHED shandra    41177      2439/./homework_1   
-tcp       64      0 shandra-vb:50884        104.21.2.130:https      CLOSE_WAIT  shandra    32995      1364/Code --standar 
-tcp        0      0 localhost:57980         localhost:40551         ESTABLISHED shandra    41160      2439/./homework_1   
-tcp        0      0 shandra-vb:33096        lb-140-82-121-4-f:https ESTABLISHED shandra    41170      2439/./homework_1   
-tcp        0      0 localhost:40551         localhost:57980         ESTABLISHED shandra    41161      2439/./homework_1
+(Not all processes could be identified, non-owned process info
+ will not be shown, you would have to be root to see it all.)
+tcp        0      0 shandra-vb:44772        lb-140-82-121-10-:https ESTABLISHED shandra    94144      6174/./homework_1   
+tcp        0      0 localhost:37355         localhost:44478         ESTABLISHED shandra    94128      6174/./homework_1   
+tcp        0      0 localhost:44478         localhost:37355         ESTABLISHED shandra    94127      6174/./homework_1   
+tcp        0      0 shandra-vb:41568        lb-140-82-121-3-f:https ESTABLISHED shandra    94137      6174/./homework_1   
+(Not all processes could be identified, non-owned process info
+ will not be shown, you would have to be root to see it all.)
+tcp        0      0 shandra-vb:44772        lb-140-82-121-10-:https ESTABLISHED shandra    94144      6174/./homework_1   
+tcp        0      0 localhost:37355         localhost:44478         ESTABLISHED shandra    94128      6174/./homework_1   
+tcp        0      0 localhost:44478         localhost:37355         ESTABLISHED shandra    94127      6174/./homework_1   
+tcp        0      0 shandra-vb:41568        lb-140-82-121-3-f:https ESTABLISHED shandra    94137      6174/./homework_1   
+(Not all processes could be identified, non-owned process info
+ will not be shown, you would have to be root to see it all.)
+tcp        0      0 shandra-vb:44772        lb-140-82-121-10-:https ESTABLISHED shandra    94144      6174/./homework_1   
+tcp        0      0 localhost:37355         localhost:44478         ESTABLISHED shandra    94128      6174/./homework_1   
+tcp        0      0 localhost:44478         localhost:37355         ESTABLISHED shandra    94127      6174/./homework_1   
+tcp        0      0 shandra-vb:41568        lb-140-82-121-3-f:https ESTABLISHED shandra    94137      6174/./homework_1   
+(Not all processes could be identified, non-owned process info
+ will not be shown, you would have to be root to see it all.)
+tcp        0      0 shandra-vb:44772        lb-140-82-121-10-:https ESTABLISHED shandra    94144      6174/./homework_1   
+tcp        0      0 localhost:37355         localhost:44478         ESTABLISHED shandra    94128      6174/./homework_1   
+tcp        0      0 localhost:44478         localhost:37355         ESTABLISHED shandra    94127      6174/./homework_1   
+tcp        0      0 shandra-vb:41568        lb-140-82-121-3-f:https ESTABLISHED shandra    94137      6174/./homework_1   
+(Not all processes could be identified, non-owned process info
+ will not be shown, you would have to be root to see it all.)
+tcp        0      0 shandra-vb:44772        lb-140-82-121-10-:https ESTABLISHED shandra    94144      6174/./homework_1   
+tcp        0      0 localhost:37355         localhost:44478         ESTABLISHED shandra    94128      6174/./homework_1   
+tcp        0      0 localhost:44478         localhost:37355         ESTABLISHED shandra    94127      6174/./homework_1   
+tcp        0      0 shandra-vb:41568        lb-140-82-121-3-f:https ESTABLISHED shandra    94137      6174/./homework_1
 ```
 
 Here we can see the connection from the binary(`homework_1`).
 
 #### TODO
 
-- [ ]  Find parameters to run `netstat` such that it is possible to stack the number of received/sent bytes by binary
+- [ ]  Find parameters to run `netstat` such that it is possible to track the number of received/sent bytes by binary
 
 ### iostat
 
-Disk monitoring tool.
+Report Central Processing Unit (CPU) statistics and input/output statistics for devices and partitions.
+
+#### Command line
+
+```bash
+iostat -dhkzy 2
+```
+
+Explanation: shows device statistisc in human-readable format, in kilobytes per second, display only active devices, skip the first run, update every 2 seconds.
+
+#### Output
+
+```bash
+Linux 5.13.0-40-generic (shandra-vb)  01.05.2022  _x86_64_ (1 CPU)
+
+
+      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+     1,50         2,0k        18,0k         0,0k       4,0k      36,0k       0,0k sda
+
+
+      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+     1,50         8,0k         0,0k         0,0k      16,0k       0,0k       0,0k sda
+
+
+      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+     1,50        38,0k         0,0k         0,0k      76,0k       0,0k       0,0k sda
+
+
+      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+    41,00         1,7M         6,0k         0,0k       3,4M      12,0k       0,0k sda
+
+
+      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+     1,99        10,0k        17,9k         0,0k      20,0k      36,0k       0,0k sda
+
+
+      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+     0,50         2,0k         0,0k         0,0k       4,0k       0,0k       0,0k sda
+
+
+      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+     0,50         2,0k         0,0k         0,0k       4,0k       0,0k       0,0k sda
+
+
+      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+     2,00         4,0k        14,0k         0,0k       8,0k      28,0k       0,0k sda
+
+
+      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+     4,98        17,9k        19,9k         0,0k      36,0k      40,0k       0,0k sda
+
+
+      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+     1,50        20,0k         0,0k         0,0k      40,0k       0,0k       0,0k sda
+
+
+      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+     0,50         4,0k         0,0k         0,0k       8,0k       0,0k       0,0k sda
+
+
+      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+     1,00         0,0k        16,0k         0,0k       0,0k      32,0k       0,0k sda
+
+
+      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+    10,00       266,0k         0,0k         0,0k     532,0k       0,0k       0,0k sda
+
+
+      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+   105,94         1,3M        11,8M         0,0k       2,7M      23,8M       0,0k sda
+
+
+      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+    42,00       140,0k        12,0M         0,0k     280,0k      24,1M       0,0k sda
+
+
+      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+   190,50         2,0M        13,7M         0,0k       3,9M      27,5M       0,0k sda
+
+
+      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+    23,50       132,0k         1,3M         0,0k     264,0k       2,6M       0,0k sda
+
+
+      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+     1,00         0,0k        23,9k         0,0k       0,0k      48,0k       0,0k sda
+
+
+      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+     8,50       116,0k        24,0k         0,0k     232,0k      48,0k       0,0k sda
+
+
+      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+     4,50        34,0k         0,0k         0,0k      68,0k       0,0k       0,0k sda
+
+
+      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+    37,00       236,0k        10,0k         0,0k     472,0k      20,0k       0,0k sda
+
+
+      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+     0,50         0,0k         4,0k         0,0k       0,0k       8,0k       0,0k sda
+
+
+      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+
+
+      tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+
+```
+
+From this output that parameter `kB_wrtn/s` (kilobytes written in second) `kB_read/s`, `kB_read`, `kB_wrtn` were increased during the program run. The usual values were in K. During the program run, the values have increase to the order of M.
+
+```bash
+    tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+  105,94         1,3M        11,8M         0,0k       2,7M      23,8M       0,0k sda
+
+    tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+  42,00       140,0k        12,0M         0,0k     280,0k      24,1M       0,0k sda
+
+    tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+  190,50         2,0M        13,7M         0,0k       3,9M      27,5M       0,0k sda
+
+    tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd Device
+  23,50       132,0k         1,3M         0,0k     264,0k       2,6M       0,0k sda
+  ```
 
 ## Conclusion
 
-- strace - non-optimal writing to file patterns in avid_writer
-- netstat - shows high network usage in does_not_download_anything_really
+- `strace` - non-optimal writing to file patterns in avid_writer
+- `netstat` - shows high network usage in `homework_1` binary but does not give information about specific function
+- `iostat` - disk activity in total but does not give information about specific functions
 
 ## References
 
