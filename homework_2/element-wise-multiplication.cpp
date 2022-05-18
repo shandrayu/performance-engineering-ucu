@@ -41,7 +41,7 @@ int main() {
   std::vector<int64_t> execution_times;
   execution_times.reserve(kMaxArraySize);
 
-  for (std::size_t array_size = 1; array_size < kMaxArraySize; ++array_size) {
+  for (std::size_t array_size = 1; array_size <= kMaxArraySize; ++array_size) {
     auto first_vector = generate_random_vector(array_size);
     auto second_vector = generate_random_vector(array_size);
 
