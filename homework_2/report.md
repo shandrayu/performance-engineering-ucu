@@ -29,6 +29,10 @@ cmake -DCMAKE_CXX_FLAGS="-O0" .
 cmake --build .
 ```
 
+![execution-time--nanoseconds-o0-10000](data/execution-time--nanoseconds-o0-10000.png)
+
+Graph has a linear trend.
+
 ### O-3 optimization
 
 Command line
@@ -37,6 +41,10 @@ Command line
 cmake -DCMAKE_CXX_FLAGS="-O3" .
 cmake --build .  
 ```
+
+![execution-time--nanoseconds-o3-10000](data/execution-time--nanoseconds-o3-10000.png)
+
+Graph is peace-wise. For array size less than 6500 trend is linear and time is better that for `O0`. But at 10000 it overshoot the absence of optimization.
 
 ### Intristics
 
