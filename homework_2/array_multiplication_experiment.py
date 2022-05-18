@@ -1,8 +1,8 @@
 import random
 import numpy as np
 import time
-import matplotlib.pyplot as plt
 from tqdm import tqdm
+from plot import save_execution_time_plot
 
 
 def multiply_arrays_by_elements(array_size: int) -> float:
@@ -30,17 +30,6 @@ def multiply_numpy_arrays(array_size: int) -> float:
     execution_time = end - start
     return execution_time
 
-def save_execution_time_plot(array, title: str) -> None:
-    plt.close()
-    array_ms = np.array(array) * 1000
-    plt.plot(array_ms)
-    plt.title(title)
-    plt.xlabel("Array size")
-    plt.ylabel("Execution time, ms")
-    plt.grid('on')
-    fig = plt.gcf()
-    fig.set_size_inches(18.5, 10.5)
-    fig.savefig(f"{title.lower().replace(' ', '-')}-{len(array)}.png", dpi=100)
 
 if __name__ == "__main__":
     MAX_ARRAY_SIZE = 10000
@@ -50,5 +39,6 @@ if __name__ == "__main__":
         arrays_by_elements_times.append(multiply_arrays_by_elements(size))
         numpy_arrays_times.append(multiply_numpy_arrays(size))
 
-    save_execution_time_plot(arrays_by_elements_times, "By-element multiplication")
+    save_execution_time_plot(arrays_by_elements_times,
+                             "By-element multiplication")
     save_execution_time_plot(numpy_arrays_times, "Numpy multiplication")
