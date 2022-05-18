@@ -43,10 +43,10 @@ def save_execution_time_plot(array, title: str) -> None:
     fig.savefig(f"{title.lower().replace(' ', '-')}-{len(array)}.png", dpi=100)
 
 if __name__ == "__main__":
-    max_array_size = 10000
+    MAX_ARRAY_SIZE = 10000
     arrays_by_elements_times = []
     numpy_arrays_times = []
-    for size in tqdm(range(max_array_size)):
+    for size in tqdm(range(MAX_ARRAY_SIZE)):
         arrays_by_elements_times.append(multiply_arrays_by_elements(size))
         numpy_arrays_times.append(multiply_numpy_arrays(size))
 
