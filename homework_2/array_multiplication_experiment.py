@@ -39,6 +39,7 @@ if __name__ == "__main__":
         arrays_by_elements_times.append(multiply_arrays_by_elements(size))
         numpy_arrays_times.append(multiply_numpy_arrays(size))
 
-    save_execution_time_plot(arrays_by_elements_times,
+    save_execution_time_plot(np.array(arrays_by_elements_times),
                              "By-element multiplication")
-    save_execution_time_plot(numpy_arrays_times, "Numpy multiplication")
+    save_execution_time_plot(
+        np.array(numpy_arrays_times), "Numpy multiplication")
