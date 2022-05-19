@@ -44,7 +44,7 @@ cmake --build .
 
 ![execution-time--nanoseconds-o3-10000](data/execution-time--nanoseconds-o3-10000.png)
 
-Graph is peace-wise. For array size less than 6500 trend is linear and time is better that for `O0`. But at 10000 it overshoot the absence of optimization.
+Graph is piece-wise, exponential.
 
 ### Intristics
 

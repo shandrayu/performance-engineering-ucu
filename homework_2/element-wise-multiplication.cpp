@@ -6,18 +6,28 @@
 #include <string>
 #include <vector>
 
+// Credit https://stackoverflow.com/questions/2704521/generate-random-double-numbers-in-c
+// TODO: Hack to avoid generator functions with parameters
+const double fMin=0.0;
+const double fMax=500;
+double fRand()
+{
+    double f = (double)rand() / RAND_MAX;
+    return fMin + f * (fMax - fMin);
+}
+
 // Credit
 // https://stackoverflow.com/questions/21516575/fill-a-vector-with-random-numbers-c
-std::vector<int> generate_random_vector(std::size_t size) {
+std::vector<double> generate_random_vector(std::size_t size) {
   std::srand(unsigned(std::time(nullptr)));
-  std::vector<int> v(size);
-  std::generate(v.begin(), v.end(), std::rand);
+  std::vector<double> v(size);
+  std::generate(v.begin(), v.end(), fRand);
   return v;
 }
 
-std::vector<int> element_wise_multiply(const std::vector<int>& lhs,
-                                       const std::vector<int>& rhs) {
-  std::vector<int> result;
+std::vector<double> element_wise_multiply(const std::vector<double>& lhs,
+                                       const std::vector<double>& rhs) {
+  std::vector<double> result;
   assert(lhs.size() == rhs.size());
   result.resize(lhs.size());
   for (std::size_t idx = 0; idx < lhs.size(); ++idx) {
