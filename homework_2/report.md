@@ -49,3 +49,5 @@ Graph is piece-wise, exponential.
 ### Intristics
 
 ## Conclusion
+
+![execution-time-for-all-experiments-10000](data/execution-time-for-all-experiments-10000.png)
