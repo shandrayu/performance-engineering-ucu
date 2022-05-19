@@ -2,7 +2,7 @@ import csv
 import numpy as np
 import os
 
-from plot import save_execution_time_plot
+from tools import save_execution_time_plot
 
 
 def plot_graph_from_csv(filename, plot_name_suffix):
