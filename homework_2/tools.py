@@ -18,13 +18,15 @@ def save_execution_time_plot(array: np.array, title: str) -> None:
         f"{title.lower().replace(' ', '-')}-{array.shape[0]}.png", dpi=100)
 
 
-def save_several_execution_time_plot(arrays: Dict[str, np.array], title: str) -> None:
+def save_several_execution_time_plot(arrays: Dict[str, np.array], title: str, limit_x, limit_y) -> None:
     plt.close()
     for name, array in arrays.items():
         plt.plot(array, label=name)
     plt.title(title)
     plt.xlabel("Array size")
     plt.ylabel("Execution time, ns")
+    plt.ylim((0, limit_y))
+    plt.xlim((0, limit_x))
     plt.grid('on')
     plt.legend()
     fig = plt.gcf()
@@ -41,7 +43,7 @@ def load_csv_to_npy(filename: str) -> Tuple[str, np.array]:
         for row in reader:
             rows.append(row)
         formatted_array = np.array(rows).astype(np.int64)
-        
+
     return header, formatted_array
 
 

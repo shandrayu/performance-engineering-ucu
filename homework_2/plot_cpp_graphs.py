@@ -12,7 +12,7 @@ def plot_graph_from_csv(filename, plot_name_suffix):
 
     header, formatted_array = load_csv_to_npy(filename)
     save_execution_time_plot(formatted_array,
-                             " ".join(header)+'-'+plot_name_suffix, 1)
+                             " ".join(header)+'-'+plot_name_suffix)
 
 
 if __name__ == "__main__":
@@ -21,3 +21,7 @@ if __name__ == "__main__":
         this_file_dir, 'data', 'execution_time_O0.csv'), 'O0')
     plot_graph_from_csv(os.path.join(
         this_file_dir, 'data', 'execution_time_O3.csv'), 'O3')
+    plot_graph_from_csv(os.path.join(
+        this_file_dir, 'data', 'execution_time_intristics_O0.csv'), 'intristics-O0')
+    plot_graph_from_csv(os.path.join(
+        this_file_dir, 'data', 'execution_time_intristics_O3.csv'), 'intristics-O3')

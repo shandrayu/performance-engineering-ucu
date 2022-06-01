@@ -48,6 +48,33 @@ Graph is piece-wise, exponential.
 
 ### Intristics
 
+### O-0 optimization
+
+Command line
+
+```bash
+cmake -DCMAKE_CXX_FLAGS="-O0" .
+cmake --build .  
+```
+
+![execution-time--nanoseconds-o3-10000](data/execution-time--nanoseconds-intristics-o0-10000.png)
+
+### O-3 optimization
+
+Command line
+
+```bash
+cmake -DCMAKE_CXX_FLAGS="-O3" .
+cmake --build .  
+```
+
+![execution-time--nanoseconds-o3-10000](data/execution-time--nanoseconds-intristics-o3-10000.png)
+
 ## Conclusion
 
 ![execution-time-for-all-experiments-10000](data/execution-time-for-all-experiments-10000.png)
+
+![execution-time-for-all-experiments-10000-zoom](data/execution-time-for-all-experiments-10000-zoom.png)
+
+- Numpy array multiplication is a winner.
+- Intristics and element-wise multiplication (O3) are almost the same for large array sizes. But intristics is better for smaller array sizes (less than 3000).
