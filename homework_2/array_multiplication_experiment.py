@@ -2,7 +2,7 @@ import random
 import numpy as np
 import time
 from tqdm import tqdm
-from tools import save_execution_time_plot, save_to_csv
+from common.tools import save_execution_time_plot, save_to_csv
 
 
 def multiply_arrays_by_elements(array_size: int) -> float:

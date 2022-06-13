@@ -1,6 +1,6 @@
 import os
 
-from tools import save_several_execution_time_plot, load_csv_to_npy
+from common.tools import save_several_execution_time_plot, load_csv_to_npy
 
 if __name__ == "__main__":
     arrays_list = ['execution_time_O0.csv', 'execution_time_O3.csv',
