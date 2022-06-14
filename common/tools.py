@@ -1,6 +1,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import csv
+import math
+import random
+import time
 from typing import Dict, Tuple
 
 
@@ -55,3 +58,33 @@ def save_to_csv(timestamps_array: np.array, filename) -> None:
         for execution_time in formatted_array:
             writer.writerow([str(execution_time)])
     file.close()
+
+
+def measure_time(func):
+
+    def wrapper_func(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        end = time.time()
+        execution_time_sec = end - start
+        return result, execution_time_sec
+
+    return wrapper_func
+
+
+def generate_random_matrix(M, N):
+    return [[random.uniform(0, 100) for _ in range(M)] for _ in range(N)]
+
+
+def is_matrix_equal(lhs, rhs):
+    # TODO: add dimension comparison
+    if type(lhs) is list:
+        M = len(lhs)
+        N = len(lhs[0])
+    elif type(lhs) is np.array:
+        M, N = lhs.shape
+
+    for i in range(M):
+        for j in range(N):
+            assert math.isclose(
+                lhs[i][j], rhs[i][j]), f"Elements at position [{i}][{j}] are not equal: {lhs[i][j]} is not {rhs[i][j]}"
