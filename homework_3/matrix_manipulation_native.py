@@ -43,12 +43,12 @@ def reversed_threshold(array, threshold):
 
 @measure_time
 def add(lhs, rhs):
-    result = [[a + b for a in a_row for b in b_row]
-              for a_row in lhs for b_row in rhs]
+    result = [[a + b for a, b in zip(a_row, b_row)]
+              for a_row, b_row in zip(lhs, rhs)]
     return result
 
 
 @measure_time
-def sum(array):
+def asum(array):
     row_sum = list(map(sum, array))
     return sum(row_sum)

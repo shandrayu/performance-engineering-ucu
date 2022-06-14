@@ -38,12 +38,21 @@
 
 ![numpy-matrix-element-wise-addition-95](data/numpy-matrix-element-wise-addition-95.png)
 
-![numpy-matrix-element-sum-95](data/numpy-matrix-element-sum-95)
+![numpy-matrix-element-sum-95](data/numpy-matrix-element-sum-95.png)
 
 ## C. Create program with Python extension for the same operations as in task A
 
 ### Results
 
+![ctypes-matrix-multiplication-95](data/ctypes-matrix-multiplication-95.png)
+
+![ctypes-matrix-threshold-95](data/ctypes-matrix-threshold-95.png)
+
+![ctypes-matrix-reverse-threshold-95](data/ctypes-matrix-reverse-threshold-95.png)
+
+![ctypes-matrix-element-wise-addition-95](data/ctypes-matrix-element-wise-addition-95.png)
+
+![ctypes-matrix-element-sum-95](data/ctypes-matrix-element-sum-95.png)
 ### Comparison
 
 ## D. Demonstrate conditions for Python extension will be faster than Numpy

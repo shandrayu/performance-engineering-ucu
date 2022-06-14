@@ -3,8 +3,9 @@ import numpy as np
 import os
 import unittest
 import matrix_manipulation_numpy
+from common.tools import measure_time
 
-
+# TODO: Bad design. Time measurement incorporated into functionality
 class MatrixManipulation:
     """
     A wrapper class for c library matrix manipulation functions.
@@ -41,6 +42,7 @@ class MatrixManipulation:
         self._sum.argtypes = [ctypes.POINTER(ctypes.c_double),  ctypes.c_int]
         self._sum.restype = ctypes.c_double
 
+    @measure_time
     def matrix_multiply(self, lhs: np.array, rhs: np.array) -> np.array:
         assert(lhs.dtype == np.float64)
         assert(rhs.dtype == np.float64)
@@ -56,6 +58,7 @@ class MatrixManipulation:
 
         return result
 
+    @measure_time
     def threshold(self, array: np.array, threshold: np.float64) -> np.array:
         assert(array.dtype == np.float64)
 
@@ -68,6 +71,7 @@ class MatrixManipulation:
 
         return result
 
+    @measure_time
     def reversed_threshold(self, array: np.array, threshold: np.float64) -> np.array:
         assert(array.dtype == np.float64)
 
@@ -80,6 +84,7 @@ class MatrixManipulation:
 
         return result
 
+    @measure_time
     def add(self, lhs: np.array, rhs: np.array) -> np.array:
         assert(lhs.dtype == np.float64)
         assert(rhs.dtype == np.float64)
@@ -94,7 +99,8 @@ class MatrixManipulation:
             lhs.shape[0]*lhs.shape[1]), result_pointer)
 
         return result
-
+    
+    @measure_time
     def sum(self, array: np.array) -> np.float64:
         assert(array.dtype == np.float64)
 
@@ -121,33 +127,33 @@ class TestMatrixManipulation(unittest.TestCase):
         self._b[2, 2] = 90
 
     def test_matrix_multiply(self):
-        result = self._lib.matrix_multiply(self._a, self._b)
+        result, _ = self._lib.matrix_multiply(self._a, self._b)
         numpy_result, _ = matrix_manipulation_numpy.multiply_square_two_matrixes(
             self._a, self._b)
         self.assertTrue(np.allclose(result, numpy_result))
 
     def test_threshold(self):
         THRESHOLD = 2.0
-        result = self._lib.threshold(self._a, THRESHOLD)
+        result, _ = self._lib.threshold(self._a, THRESHOLD)
         numpy_result, _ = matrix_manipulation_numpy.threshold(
             self._a, THRESHOLD)
         self.assertTrue(np.allclose(result, numpy_result))
 
     def test_reversed_threshold(self):
         THRESHOLD = 2.0
-        result = self._lib.reversed_threshold(self._a, THRESHOLD)
+        result, _ = self._lib.reversed_threshold(self._a, THRESHOLD)
         numpy_result, _ = matrix_manipulation_numpy.threshold_reverse(
             self._a, THRESHOLD)
         self.assertTrue(np.allclose(result, numpy_result))
 
     def test_add(self):
-        result = self._lib.add(self._a, self._b)
+        result, _ = self._lib.add(self._a, self._b)
         numpy_result, _ = matrix_manipulation_numpy.add(
             self._a, self._b)
         self.assertTrue(np.allclose(result, numpy_result))
 
     def test_sum(self):
-        result = self._lib.sum(self._a)
+        result, _ = self._lib.sum(self._a)
         numpy_result, _ = matrix_manipulation_numpy.sum(
             self._a)
         self.assertAlmostEqual(result, numpy_result)
