@@ -5,6 +5,7 @@ import math
 import random
 import time
 from typing import Dict, Tuple
+import os
 
 
 def save_execution_time_plot(array: np.array, title: str) -> None:
@@ -88,3 +89,17 @@ def is_matrix_equal(lhs, rhs):
         for j in range(N):
             assert math.isclose(
                 lhs[i][j], rhs[i][j]), f"Elements at position [{i}][{j}] are not equal: {lhs[i][j]} is not {rhs[i][j]}"
+
+
+def plot_several_graphs(graphs_list, title, limit_x, limit_y, data_dir=""):
+    if not data_dir:
+        this_file_dir = os.path.dirname(os.path.abspath(__file__))
+        data_dir = os.path.join(this_file_dir, 'data')
+    arrays_to_plot = {}
+    for array_filename in graphs_list:
+        _, array = load_csv_to_npy(os.path.join(
+            data_dir, array_filename))
+        arrays_to_plot[array_filename] = array
+
+    save_several_execution_time_plot(
+        arrays_to_plot, title, limit_x, limit_y)
