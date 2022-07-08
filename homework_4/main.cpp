@@ -118,28 +118,27 @@ int main() {
           execution_times[std::string("matrix_multiplication")]);
       PrintMatrix(first_matrix, array_size);
       PrintMatrix(second_matrix, array_size);
-      homework_4::matrix_multiply(first_matrix.data(), second_matrix.data(),
-                                  array_size, array_size, result.data());
+      matrix_multiply(first_matrix.data(), second_matrix.data(), array_size,
+                      array_size, result.data());
       PrintMatrix(result, array_size);
       (void)result;
     }
     {
       TimeContainerFiller timer(execution_times["threshold"]);
-      homework_4::threshold(first_matrix.data(), array_size * array_size,
-                            kThreshold, result.data());
+      threshold(first_matrix.data(), array_size * array_size, kThreshold,
+                result.data());
       (void)result;
     }
     {
       TimeContainerFiller timer(execution_times["reversed_threshold"]);
-      homework_4::reversed_threshold(first_matrix.data(),
-                                     array_size * array_size, kThreshold,
-                                     result.data());
+      reversed_threshold(first_matrix.data(), array_size * array_size,
+                         kThreshold, result.data());
       (void)result;
     }
     {
       TimeContainerFiller timer(execution_times["element_wise_sum"]);
-      homework_4::element_wise_sum(first_matrix.data(), second_matrix.data(),
-                                   array_size * array_size, result.data());
+      element_wise_sum(first_matrix.data(), second_matrix.data(),
+                       array_size * array_size, result.data());
       (void)result;
     }
     {

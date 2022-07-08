@@ -76,7 +76,6 @@ __global__ void ElementWiseSumKernel(const double* first_array,
 }
 }  // namespace
 
-namespace homework_4 {
 template <typename T>
 struct CudaArrayContainer {
   CudaArrayContainer(const T* data, std::size_t num_elements)
@@ -111,6 +110,7 @@ struct CudaArrayContainer {
   std::size_t data_size_bytes_;
 };
 
+extern "C" {
 void matrix_multiply(const double* first_array, const double* second_array,
                      int rows, int cols, double* result) {
   const auto data_size = rows * cols;
@@ -189,4 +189,4 @@ double sum(double* array, std::size_t data_size) {
   double result = 0.0;
   return result;
 }
-}  // namespace homework_4
+}

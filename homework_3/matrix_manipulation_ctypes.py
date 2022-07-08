@@ -2,7 +2,7 @@ import ctypes
 import numpy as np
 import os
 import unittest
-import matrix_manipulation_numpy
+from homework_3.matrix_manipulation_numpy import *
 from common.tools import measure_time
 
 # TODO: Bad design. Time measurement incorporated into functionality
@@ -128,33 +128,33 @@ class TestMatrixManipulation(unittest.TestCase):
 
     def test_matrix_multiply(self):
         result, _ = self._lib.matrix_multiply(self._a, self._b)
-        numpy_result, _ = matrix_manipulation_numpy.multiply_square_two_matrixes(
+        numpy_result, _ = multiply_square_two_matrixes(
             self._a, self._b)
         self.assertTrue(np.allclose(result, numpy_result))
 
     def test_threshold(self):
         THRESHOLD = 2.0
         result, _ = self._lib.threshold(self._a, THRESHOLD)
-        numpy_result, _ = matrix_manipulation_numpy.threshold(
+        numpy_result, _ = threshold(
             self._a, THRESHOLD)
         self.assertTrue(np.allclose(result, numpy_result))
 
     def test_reversed_threshold(self):
         THRESHOLD = 2.0
         result, _ = self._lib.reversed_threshold(self._a, THRESHOLD)
-        numpy_result, _ = matrix_manipulation_numpy.threshold_reverse(
+        numpy_result, _ = threshold_reverse(
             self._a, THRESHOLD)
         self.assertTrue(np.allclose(result, numpy_result))
 
     def test_add(self):
         result, _ = self._lib.add(self._a, self._b)
-        numpy_result, _ = matrix_manipulation_numpy.add(
+        numpy_result, _ = add(
             self._a, self._b)
         self.assertTrue(np.allclose(result, numpy_result))
 
     def test_sum(self):
         result, _ = self._lib.sum(self._a)
-        numpy_result, _ = matrix_manipulation_numpy.sum(
+        numpy_result, _ = sum(
             self._a)
         self.assertAlmostEqual(result, numpy_result)
 

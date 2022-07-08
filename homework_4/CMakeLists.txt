@@ -4,7 +4,8 @@ project(Homework4 VERSION 0.1 LANGUAGES CXX CUDA)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CUDA_STANDARD 14)
 
-add_library(matrix_manipulation_cuda matrix_manipulation.cu)
+add_library(matrix_manipulation_cuda SHARED matrix_manipulation.cu)
+target_compile_options(matrix_manipulation_cuda PUBLIC "$<$<CONFIG:RELEASE>:-Wall -fPIC>" )
 
 add_executable(time_measurement_binary main.cpp)
 
