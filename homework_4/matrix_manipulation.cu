@@ -74,6 +74,33 @@ __global__ void ElementWiseSumKernel(const double* first_array,
 
   result[idx] = first_array[idx] + second_array[idx];
 }
+
+__global__ void SumParallerReductionKernel(const double* array,
+                                           std::size_t data_size,
+                                           double* result) {
+  int idx = threadIdx.x;
+
+  if (idx >= data_size) {
+    return;
+  }
+
+  double local_sum = 0;
+  for (int i = idx; i < data_size; i += kThreadsPerBlock) {
+    local_sum += array[i];
+  }
+
+  __shared__ double r[kThreadsPerBlock];
+  r[idx] = local_sum;
+
+  __syncthreads();
+
+  for (int size = kThreadsPerBlock / 2; size > 0; size /= 2) {
+    if (idx < size) r[idx] += r[idx + size];
+    __syncthreads();
+  }
+
+  if (idx == 0) *result = r[0];
+}
 }  // namespace
 
 template <typename T>
@@ -187,6 +214,15 @@ void add(const double* first_array, const double* second_array,
 
 double sum(double* array, std::size_t data_size) {
   double result = 0.0;
+  CudaArrayContainer<double> array_gpu(array, data_size);
+  CudaArrayContainer<double> result_gpu(&result, 1);
+
+  array_gpu.CopyFromHost(array);
+
+  SumParallerReductionKernel<<<1, kThreadsPerBlock>>>(
+      array_gpu.GetGpuPtr(), data_size, result_gpu.GetGpuPtr());
+
+  result_gpu.CopyToHost(&result);
   return result;
 }
 }

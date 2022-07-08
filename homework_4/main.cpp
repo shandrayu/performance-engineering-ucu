@@ -37,11 +37,6 @@ void write_time_to_csv(std::string filename,
   }
 }
 
-double sum(double* array, int data_size) {
-  double result = 0.0;
-  return result;
-}
-
 // Not thread-safe in any way, will work only for linear workflow
 struct TimeContainerFiller {
   TimeContainerFiller(std::vector<int64_t>& time_container)
@@ -116,11 +111,11 @@ int main() {
     {
       TimeContainerFiller timer(
           execution_times[std::string("matrix_multiplication")]);
-      PrintMatrix(first_matrix, array_size);
-      PrintMatrix(second_matrix, array_size);
+      // PrintMatrix(first_matrix, array_size);
+      // PrintMatrix(second_matrix, array_size);
       matrix_multiply(first_matrix.data(), second_matrix.data(), array_size,
                       array_size, result.data());
-      PrintMatrix(result, array_size);
+      // PrintMatrix(result, array_size);
       (void)result;
     }
     {
