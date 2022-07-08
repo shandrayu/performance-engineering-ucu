@@ -37,9 +37,6 @@ void write_time_to_csv(std::string filename,
   }
 }
 
-void matrix_multiply(const double* lhs, const double* rhs, int width,
-                     int height, double* result) {}
-
 double sum(double* array, int data_size) {
   double result = 0.0;
   return result;
@@ -73,8 +70,31 @@ void PrintVector(const std::vector<T>& vector) {
   std::cout << std::endl;
 }
 
+template <typename T>
+void PrintMatrix(const std::vector<T>& vector, int width) {
+  std::cout << "Size: " << vector.size() << std::endl;
+  for (int row = 0; row < vector.size(); row++) {
+  }
+  int idx = 0;
+  std::cout << "[";
+  for (const auto& val : vector) {
+    if (idx % width == 0) {
+      if (idx != 0) {
+        std::cout << "]," << std::endl;
+      }
+      std::cout << "[";
+    }
+    std::cout << val;
+    if (idx % width != width - 1) {
+      std::cout << ", ";
+    }
+    idx++;
+  }
+  std::cout << "]]" << std::endl;
+}
+
 int main() {
-  constexpr std::size_t kMaxMatrixSize = 15;
+  constexpr std::size_t kMaxMatrixSize = 5;
   constexpr double kThreshold = 250.0;
   std::vector<std::string> experiment_names = {
       "matrix_multiplication", "threshold", "reversed_threshold",
@@ -96,9 +116,11 @@ int main() {
     {
       TimeContainerFiller timer(
           execution_times[std::string("matrix_multiplication")]);
-
-      matrix_multiply(first_matrix.data(), second_matrix.data(), array_size,
-                      array_size, result.data());
+      PrintMatrix(first_matrix, array_size);
+      PrintMatrix(second_matrix, array_size);
+      homework_4::matrix_multiply(first_matrix.data(), second_matrix.data(),
+                                  array_size, array_size, result.data());
+      PrintMatrix(result, array_size);
       (void)result;
     }
     {

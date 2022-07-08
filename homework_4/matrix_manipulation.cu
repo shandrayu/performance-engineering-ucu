@@ -7,6 +7,7 @@
 
 namespace {
 constexpr int kThreadsPerBlock = 256;
+constexpr int kThreadsPerBlock2D = 16;
 
 // Credit: lecture notes
 inline cudaError_t checkCudaErr(cudaError_t err, const char* msg) {
@@ -15,6 +16,24 @@ inline cudaError_t checkCudaErr(cudaError_t err, const char* msg) {
             cudaGetErrorString(err));
   }
   return err;
+}
+
+__global__ void MatrixMultiplyKernel(const double* first_array,
+                                     const double* second_array, int rows,
+                                     int cols, double* result) {
+  int col = threadIdx.x + blockIdx.x * blockDim.x;
+  int row = threadIdx.y + blockIdx.y * blockDim.y;
+
+  if (row >= rows || col >= cols) {
+    return;
+  }
+
+  double row_col_product = 0.0;
+  for (int k = 0; k < cols; k++) {
+    row_col_product +=
+        first_array[row * cols + k] * second_array[k * cols + col];
+  }
+  result[row * cols + col] = row_col_product;
 }
 
 __global__ void ThresholdKernel(const double* array, std::size_t data_size,
@@ -92,8 +111,26 @@ struct CudaArrayContainer {
   std::size_t data_size_bytes_;
 };
 
-void matrix_multiply(const double* lhs, const double* rhs, int width,
-                     int height, double* result) {}
+void matrix_multiply(const double* first_array, const double* second_array,
+                     int rows, int cols, double* result) {
+  const auto data_size = rows * cols;
+  CudaArrayContainer<double> first_array_gpu(first_array, data_size);
+  CudaArrayContainer<double> second_array_gpu(second_array, data_size);
+  CudaArrayContainer<double> result_gpu(result, data_size);
+
+  first_array_gpu.CopyFromHost(first_array);
+  second_array_gpu.CopyFromHost(second_array);
+
+  const dim3 Threads(kThreadsPerBlock2D, kThreadsPerBlock2D);
+  const int block_x = (cols / kThreadsPerBlock2D) + 1;
+  const int block_y = (rows / kThreadsPerBlock2D) + 1;
+  const dim3 Blocks(block_x, block_y);
+  MatrixMultiplyKernel<<<Blocks, Threads>>>(first_array_gpu.GetGpuPtr(),
+                                            second_array_gpu.GetGpuPtr(), rows,
+                                            cols, result_gpu.GetGpuPtr());
+
+  result_gpu.CopyToHost(result);
+}
 
 void threshold(const double* array, std::size_t data_size, double threshold,
                double* result) {
