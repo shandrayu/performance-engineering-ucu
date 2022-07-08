@@ -1,0 +1,228 @@
+#include <cuda_runtime.h>
+#include <device_launch_parameters.h>
+// #include <stdlib.h>
+#include <stdio.h>
+
+#include "matrix_manipulation.cuh"
+
+namespace {
+constexpr int kThreadsPerBlock = 256;
+constexpr int kThreadsPerBlock2D = 16;
+
+// Credit: lecture notes
+inline cudaError_t checkCudaErr(cudaError_t err, const char* msg) {
+  if (err != cudaSuccess) {
+    fprintf(stderr, "CUDA Runtime error at %s: %s\n", msg,
+            cudaGetErrorString(err));
+  }
+  return err;
+}
+
+__global__ void MatrixMultiplyKernel(const double* first_array,
+                                     const double* second_array, int rows,
+                                     int cols, double* result) {
+  int col = threadIdx.x + blockIdx.x * blockDim.x;
+  int row = threadIdx.y + blockIdx.y * blockDim.y;
+
+  if (row >= rows || col >= cols) {
+    return;
+  }
+
+  double row_col_product = 0.0;
+  for (int k = 0; k < cols; k++) {
+    row_col_product +=
+        first_array[row * cols + k] * second_array[k * cols + col];
+  }
+  result[row * cols + col] = row_col_product;
+}
+
+__global__ void ThresholdKernel(const double* array, std::size_t data_size,
+                                double threshold, double* result) {
+  int idx = threadIdx.x + blockIdx.x * blockDim.x;
+
+  if (idx >= data_size) {
+    return;
+  }
+
+  const auto value = array[idx];
+
+  result[idx] = value < threshold ? 0 : 1;
+}
+
+__global__ void ReversedThresholdKernel(const double* array,
+                                        std::size_t data_size, double threshold,
+                                        double* result) {
+  int idx = threadIdx.x + blockIdx.x * blockDim.x;
+
+  if (idx >= data_size) {
+    return;
+  }
+
+  const auto value = array[idx];
+
+  result[idx] = value < threshold ? 1 : 0;
+}
+
+__global__ void ElementWiseSumKernel(const double* first_array,
+                                     const double* second_array,
+                                     std::size_t data_size, double* result) {
+  int idx = threadIdx.x + blockIdx.x * blockDim.x;
+
+  if (idx >= data_size) {
+    return;
+  }
+
+  result[idx] = first_array[idx] + second_array[idx];
+}
+
+__global__ void SumParallerReductionKernel(const double* array,
+                                           std::size_t data_size,
+                                           double* result) {
+  int idx = threadIdx.x;
+
+  if (idx >= data_size) {
+    return;
+  }
+
+  double local_sum = 0;
+  for (int i = idx; i < data_size; i += kThreadsPerBlock) {
+    local_sum += array[i];
+  }
+
+  __shared__ double r[kThreadsPerBlock];
+  r[idx] = local_sum;
+
+  __syncthreads();
+
+  for (int size = kThreadsPerBlock / 2; size > 0; size /= 2) {
+    if (idx < size) r[idx] += r[idx + size];
+    __syncthreads();
+  }
+
+  if (idx == 0) *result = r[0];
+}
+}  // namespace
+
+template <typename T>
+struct CudaArrayContainer {
+  CudaArrayContainer(const T* data, std::size_t num_elements)
+      : num_elements_(num_elements) {
+    data_size_bytes_ = num_elements_ * sizeof(T);
+    cudaMalloc(&gpu_data_, data_size_bytes_);
+    checkCudaErr(cudaGetLastError(), "cudaMalloc");
+  }
+  ~CudaArrayContainer() {
+    cudaFree(gpu_data_);
+    checkCudaErr(cudaGetLastError(), "cudaFree");
+  }
+  T* GetGpuPtr() const { return gpu_data_; }
+  std::size_t GetNumElements() const { return num_elements_; }
+  std::size_t GetDataSizeBytes() const { return data_size_bytes_; }
+
+  void CopyToHost(T* host_pointer) const {
+    cudaMemcpy(host_pointer, GetGpuPtr(), GetDataSizeBytes(),
+               cudaMemcpyDeviceToHost);
+    checkCudaErr(cudaGetLastError(), "cudaMemcpy");
+  }
+
+  void CopyFromHost(const T* host_pointer) const {
+    cudaMemcpy(GetGpuPtr(), host_pointer, GetDataSizeBytes(),
+               cudaMemcpyHostToDevice);
+    checkCudaErr(cudaGetLastError(), "cudaMemcpy");
+  }
+
+ private:
+  T* gpu_data_;
+  std::size_t num_elements_;
+  std::size_t data_size_bytes_;
+};
+
+extern "C" {
+void matrix_multiply(const double* first_array, const double* second_array,
+                     int rows, int cols, double* result) {
+  const auto data_size = rows * cols;
+  CudaArrayContainer<double> first_array_gpu(first_array, data_size);
+  CudaArrayContainer<double> second_array_gpu(second_array, data_size);
+  CudaArrayContainer<double> result_gpu(result, data_size);
+
+  first_array_gpu.CopyFromHost(first_array);
+  second_array_gpu.CopyFromHost(second_array);
+
+  const dim3 Threads(kThreadsPerBlock2D, kThreadsPerBlock2D);
+  const int block_x = (cols / kThreadsPerBlock2D) + 1;
+  const int block_y = (rows / kThreadsPerBlock2D) + 1;
+  const dim3 Blocks(block_x, block_y);
+  MatrixMultiplyKernel<<<Blocks, Threads>>>(first_array_gpu.GetGpuPtr(),
+                                            second_array_gpu.GetGpuPtr(), rows,
+                                            cols, result_gpu.GetGpuPtr());
+
+  result_gpu.CopyToHost(result);
+}
+
+void threshold(const double* array, std::size_t data_size, double threshold,
+               double* result) {
+  CudaArrayContainer<double> array_gpu(array, data_size);
+  CudaArrayContainer<double> result_gpu(result, data_size);
+
+  array_gpu.CopyFromHost(array);
+
+  const dim3 Threads(kThreadsPerBlock);
+  const int block_x = (data_size / kThreadsPerBlock) + 1;
+  const dim3 Blocks(block_x);
+  ThresholdKernel<<<Blocks, Threads>>>(array_gpu.GetGpuPtr(),
+                                       array_gpu.GetNumElements(), threshold,
+                                       result_gpu.GetGpuPtr());
+
+  result_gpu.CopyToHost(result);
+}
+
+void reversed_threshold(const double* array, std::size_t data_size,
+                        double threshold, double* result) {
+  CudaArrayContainer<double> array_gpu(array, data_size);
+  CudaArrayContainer<double> result_gpu(result, data_size);
+
+  array_gpu.CopyFromHost(array);
+
+  const dim3 Threads(kThreadsPerBlock);
+  const int block_x = (data_size / kThreadsPerBlock) + 1;
+  const dim3 Blocks(block_x);
+  ReversedThresholdKernel<<<Blocks, Threads>>>(
+      array_gpu.GetGpuPtr(), array_gpu.GetNumElements(), threshold,
+      result_gpu.GetGpuPtr());
+
+  result_gpu.CopyToHost(result);
+}
+
+void add(const double* first_array, const double* second_array,
+         std::size_t data_size, double* result) {
+  CudaArrayContainer<double> first_array_gpu(first_array, data_size);
+  CudaArrayContainer<double> second_array_gpu(second_array, data_size);
+  CudaArrayContainer<double> result_gpu(result, data_size);
+
+  first_array_gpu.CopyFromHost(first_array);
+  second_array_gpu.CopyFromHost(second_array);
+
+  const dim3 Threads(kThreadsPerBlock);
+  const int block_x = (data_size / kThreadsPerBlock) + 1;
+  const dim3 Blocks(block_x);
+  ElementWiseSumKernel<<<Blocks, Threads>>>(
+      first_array_gpu.GetGpuPtr(), second_array_gpu.GetGpuPtr(),
+      first_array_gpu.GetNumElements(), result_gpu.GetGpuPtr());
+
+  result_gpu.CopyToHost(result);
+}
+
+double sum(double* array, std::size_t data_size) {
+  double result = 0.0;
+  CudaArrayContainer<double> array_gpu(array, data_size);
+  CudaArrayContainer<double> result_gpu(&result, 1);
+
+  array_gpu.CopyFromHost(array);
+
+  SumParallerReductionKernel<<<1, kThreadsPerBlock>>>(
+      array_gpu.GetGpuPtr(), data_size, result_gpu.GetGpuPtr());
+
+  result_gpu.CopyToHost(&result);
+  return result;
+}
+}
