@@ -6,29 +6,24 @@
 #include <fstream>
 #include <iostream>
 #include <map>
+#include <random>
 #include <string>
 #include <vector>
 
 #include "matrix_manipulation.cuh"
 
 // TODO: copy-pase from HW2. Make common if time allows
-// Credit
-// https://stackoverflow.com/questions/2704521/generate-random-double-numbers-in-c
-// TODO: Hack to avoid generator functions with parameters
-const double fMin = 0.0;
-const double fMax = 500;
-double fRand() {
-  double f = (double)rand() / RAND_MAX;
-  return fMin + f * (fMax - fMin);
-}
-
-// TODO: copy-pase from HW2. Make common if time allows
+// TODO: Modified random vector generator.
 // Credit
 // https://stackoverflow.com/questions/21516575/fill-a-vector-with-random-numbers-c
 std::vector<double> generate_random_vector(std::size_t size) {
-  std::srand(unsigned(std::time(nullptr)));
+  constexpr double kMinValue = 0;
+  constexpr double kMaxValue = 500;
+  static std::uniform_real_distribution<double> distribution(kMinValue,
+                                                             kMaxValue);
+  static std::default_random_engine generator;
   std::vector<double> v(size);
-  std::generate(v.begin(), v.end(), fRand);
+  std::generate(v.begin(), v.end(), []() { return distribution(generator); });
   return v;
 }
 
@@ -44,14 +39,6 @@ void write_time_to_csv(std::string filename,
 
 void matrix_multiply(const double* lhs, const double* rhs, int width,
                      int height, double* result) {}
-
-// void threshold(const double* array, int data_size, double threshold,
-//                double* result) {}
-
-void reversed_threshold(const double* array, int data_size, double threshold,
-                        double* result) {}
-void element_wise_sum(const double* lhs, const double* rhs, int data_size,
-                      double* result) {}
 
 double sum(double* array, int data_size) {
   double result = 0.0;
@@ -76,6 +63,15 @@ struct TimeContainerFiller {
   std::chrono::time_point<std::chrono::high_resolution_clock> start_;
   std::vector<int64_t>& time_container_;
 };
+
+template <typename T>
+void PrintVector(const std::vector<T>& vector) {
+  std::cout << "Size: " << vector.size() << std::endl;
+  for (const auto& val : vector) {
+    std::cout << val << " ";
+  }
+  std::cout << std::endl;
+}
 
 int main() {
   constexpr std::size_t kMaxMatrixSize = 15;
@@ -107,30 +103,21 @@ int main() {
     }
     {
       TimeContainerFiller timer(execution_times["threshold"]);
-      for (const auto& val : first_matrix) {
-        std::cout << val << " ";
-      }
-      std::cout << std::endl;
       homework_4::threshold(first_matrix.data(), array_size * array_size,
                             kThreshold, result.data());
-
-      std::cout << result.size() << std::endl;
-      for (const auto& val : result) {
-        std::cout << val << " ";
-      }
-      std::cout << std::endl;
       (void)result;
     }
     {
       TimeContainerFiller timer(execution_times["reversed_threshold"]);
-      reversed_threshold(first_matrix.data(), array_size * array_size,
-                         kThreshold, result.data());
+      homework_4::reversed_threshold(first_matrix.data(),
+                                     array_size * array_size, kThreshold,
+                                     result.data());
       (void)result;
     }
     {
       TimeContainerFiller timer(execution_times["element_wise_sum"]);
-      element_wise_sum(first_matrix.data(), second_matrix.data(),
-                       array_size * array_size, result.data());
+      homework_4::element_wise_sum(first_matrix.data(), second_matrix.data(),
+                                   array_size * array_size, result.data());
       (void)result;
     }
     {

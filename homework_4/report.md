@@ -5,12 +5,12 @@
 1. Two square matrixes A and B are multiplied and result is stored to C
 2. Threshold of the matrix
 
-   - if value <= threshold 0
+   - if value < threshold 0
    - 1 otherwise
 
 3. Threshold of the matrix reversed
 
-   - if value <= threshold 1
+   - if value < threshold 1
    - 0 otherwise
 
 4. Sum element-wise two matrixes
