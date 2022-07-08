@@ -166,8 +166,8 @@ void reversed_threshold(const double* array, std::size_t data_size,
   result_gpu.CopyToHost(result);
 }
 
-void element_wise_sum(const double* first_array, const double* second_array,
-                      std::size_t data_size, double* result) {
+void add(const double* first_array, const double* second_array,
+         std::size_t data_size, double* result) {
   CudaArrayContainer<double> first_array_gpu(first_array, data_size);
   CudaArrayContainer<double> second_array_gpu(second_array, data_size);
   CudaArrayContainer<double> result_gpu(result, data_size);

@@ -28,14 +28,14 @@ class TestMatrixManipulation(unittest.TestCase):
     def test_threshold(self):
         THRESHOLD = 2.0
         result, _ = self._lib.threshold(self._a, THRESHOLD)
-        numpy_result, _ = threshold(
+        numpy_result, _ = threshold_reverse(
             self._a, THRESHOLD)
         self.assertTrue(np.allclose(result, numpy_result))
 
     def test_reversed_threshold(self):
         THRESHOLD = 2.0
         result, _ = self._lib.reversed_threshold(self._a, THRESHOLD)
-        numpy_result, _ = threshold_reverse(
+        numpy_result, _ = threshold(
             self._a, THRESHOLD)
         self.assertTrue(np.allclose(result, numpy_result))
 

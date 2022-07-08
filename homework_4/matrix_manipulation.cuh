@@ -7,7 +7,7 @@ void threshold(const double* array, std::size_t data_size, double threshold,
                double* result);
 void reversed_threshold(const double* array, std::size_t data_size,
                         double threshold, double* result);
-void element_wise_sum(const double* first_array, const double* second_array,
-                      std::size_t data_size, double* result);
+void add(const double* first_array, const double* second_array,
+         std::size_t data_size, double* result);
 double sum(double* array, std::size_t data_size);
 }

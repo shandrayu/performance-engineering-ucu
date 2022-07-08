@@ -137,13 +137,15 @@ int main() {
     }
     {
       TimeContainerFiller timer(execution_times["element_wise_sum"]);
-      element_wise_sum(first_matrix.data(), second_matrix.data(),
-                       array_size * array_size, result.data());
+      add(first_matrix.data(), second_matrix.data(), array_size * array_size,
+          result.data());
       (void)result;
     }
     {
       TimeContainerFiller timer(execution_times["element_wise_sum"]);
+      PrintVector(first_matrix);
       auto sum_result = sum(first_matrix.data(), array_size * array_size);
+      PrintVector<double>({sum_result});
       (void)sum_result;
     }
   }
